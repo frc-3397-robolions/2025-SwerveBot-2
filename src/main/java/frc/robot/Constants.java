@@ -1,5 +1,7 @@
 package frc.robot;
 
+import java.util.Map;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -14,6 +16,26 @@ import frc.lib.util.SwerveModuleConstants;
 
 
 public final class Constants {
+
+    public static final class ButtonMap {
+        public static final int L1 = 5;
+        public static final int L2 = 3;
+        public static final int L3 = 4;
+        public static final int L4 = 6;
+        public static final int L23 = 1;
+        public static final int L34 = 2;
+        public static final int Floor = 1; // axis
+        public static final int Barge = 3; // axis
+        public static final int Processor = 2; // axis
+        public static final int cIn = 9;
+        public static final int cOut = 10;
+        public static final int aIn = 3; // trigger -- XBox
+        public static final int aOut = 6; // XBox
+        public static final int ClimbIn = 2; // trigger  -- XBox
+        public static final int ClimbOut = 5; // Xbox
+        public static final int Callibration = 10; // Xbox
+    }
+
     public static final double stickDeadband = 0.1;
 
     public static class OperatorConstants {
@@ -143,6 +165,76 @@ public final class Constants {
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
     }
+
+    public static final class CurrentLimit {
+        public static final int kDrive = 60;
+        public static final int kAzimuth = 20;
+        public static final int kIntakeAngle = 40;
+        public static final int kIntakeWheels = 20;
+        public static final int kShooter = 40;
+      }
+
+      public static final class GlobalConstants {
+        public static final double kVoltCompensation = 12.6; // Sets a voltage compensation value ideally 12.6V
+        public static final int PCHID = 20;
+        public static final int PDHID = 1;
+        public static final double kLoopTime = 0.020;
+      }
+
+      public static final class States {
+        
+        public static Map<PositionState, Double> DesiredHeightMap = Map.of(
+            PositionState.Floor, 0.0,
+            PositionState.Home, 0.0,
+            PositionState.L2, 0.0,
+            PositionState.L23, 0.0,
+            PositionState.L3, 0.0,
+            PositionState.L34, 0.0,
+            PositionState.L4, 0.0,
+            PositionState.Barge, 0.0,
+            PositionState.Processor, 0.0
+            );
+
+        public static Map<PositionState, Double> DesiredAngleMap = Map.of(
+                PositionState.Floor, 0.0,
+                PositionState.Home, 0.0,
+                PositionState.L2, 0.0,
+                PositionState.L23, 0.0,
+                PositionState.L3, 0.0,
+                PositionState.L34, 0.0,
+                PositionState.L4, 0.0,
+                PositionState.Barge, 0.0,
+                PositionState.Processor, 0.0
+                );
+
+        public enum PositionState {
+            Floor,
+            Home,
+            L2,
+            L23,
+            L3,
+            L34,
+            L4,
+            Barge,
+            Processor
+        }
+      }
+
+      public static final class ClawConstants {
+        public static final int kAngle = 11;
+        public static final int kDrive = 9;
+        public static final double kP = 0.75;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kFF = 0;      
+        public static final double kGearRatio = (58.0/10.0) * (58.0/18.0) * (30.0/12.0);
+        public static final double kAnglePositionFactor = ((2 * Math.PI) / (kGearRatio));
+        public static final double kPositionTolerance = 0.04;
+        public static final double kIntakePower = 0.75;
+        public static final double kOuttakePower = -1;
+        public static final double kMaxVel = 7;
+        public static final double kMaxAccel = 5;
+      }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
         public static final double kMaxSpeedMetersPerSecond = 3;

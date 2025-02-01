@@ -1,16 +1,14 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.ButtonMap;
 
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -41,6 +39,7 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
+    private final Claw claw = new Claw();
     // private final UsbCamera frontCamera;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -68,7 +67,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        m_driverController.start().onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        m_driverController.button(ButtonMap.Callibration).onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
     }
 
