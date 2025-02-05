@@ -1,10 +1,12 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.Constants.States.PositionState;
 import frc.robot.Constants.ButtonMap;
-
+import frc.robot.Constants.ElevatorConstants;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -40,6 +42,9 @@ public class RobotContainer {
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final Claw claw = new Claw();
+    private final Elevator elevatorMotor1 = new Elevator(ElevatorConstants.CANIDMotor1);
+    private final Elevator elevatorMotor2 = new Elevator(ElevatorConstants.CANIDMotor2);
+    private final Intake intake = new Intake();
     // private final UsbCamera frontCamera;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -69,6 +74,28 @@ public class RobotContainer {
         /* Driver Buttons */
         m_driverController.button(ButtonMap.Callibration).onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
+        setButtonAction(ButtonMap.L1, PositionState.Home);
+        setButtonAction(ButtonMap.L2, PositionState.L2);
+        setButtonAction(ButtonMap.L23, PositionState.L23);
+        setButtonAction(ButtonMap.L3, PositionState.L3);
+        setButtonAction(ButtonMap.L34, PositionState.L34);
+        setButtonAction(ButtonMap.L4, PositionState.L4);
+        setButtonAction(ButtonMap.Barge, PositionState.Barge);
+        setButtonAction(ButtonMap.Floor, PositionState.Floor);
+        setButtonAction(ButtonMap.Processor, PositionState.Processor);
+
+        m_operatorController.button(ButtonMap.cIn).whileTrue(intake.Intake());
+        m_operatorController.button(ButtonMap.cOut).whileTrue(intake.Outtake());
+
+        m_operatorController.button(ButtonMap.aIn).whileTrue(intake.Intake());
+        m_operatorController.button(ButtonMap.aOut).whileTrue(intake.Outtake());
+    }
+
+    private void setButtonAction(int button, PositionState state)
+    {
+        m_operatorController.button(button).onTrue(claw.rotateWrist(state));
+        m_operatorController.button(button).onTrue(elevatorMotor1.setDesiredHeight(state));
+        m_operatorController.button(button).onTrue(elevatorMotor2.setDesiredHeight(state));
     }
 
     /**

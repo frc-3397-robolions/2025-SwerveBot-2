@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CurrentLimit;
 import frc.robot.Constants.GlobalConstants;
+import frc.robot.Constants.States;
 import frc.robot.utilities.MathUtils;
 
 import static frc.robot.Constants.ClawConstants.*;
@@ -43,12 +44,11 @@ public class Claw extends SubsystemBase {
   private boolean intakeArrived = false;
   private boolean intaking = false;
   private boolean outtaking = false;
-  private double updateIntake = 0.0;
   private double currentPosition = 0.0;
 
   public Claw() {
     // The motor controlling the angle of the assembly
-    angleMotor = new SparkMax(kAngle, SparkMax.MotorType.kBrushless);
+    angleMotor = new SparkMax(CANIDAngle, SparkMax.MotorType.kBrushless);
     SparkMaxConfig config = new SparkMaxConfig();
     config
         .inverted(false)
@@ -71,7 +71,7 @@ public class Claw extends SubsystemBase {
     anglePID = angleMotor.getClosedLoopController();
 
     // The motor driving the intake wheels
-    driveMotor = new SparkMax(kDrive, SparkMax.MotorType.kBrushless);
+    driveMotor = new SparkMax(CANIDDrive, SparkMax.MotorType.kBrushless);
     SparkMaxConfig configDrive = new SparkMaxConfig();
     configDrive
         .idleMode(IdleMode.kBrake);
@@ -84,6 +84,8 @@ public class Claw extends SubsystemBase {
 
     // If the intake is within tolerance of it's desired angle, set this variable to
     // true so other files can act
+
+    goToWristPosition(currentPosition);
 
     if (MathUtils.angleInRange(angleEncoder.getPosition(), currentPosition, kPositionTolerance))
       intakeArrived = true;
@@ -119,6 +121,12 @@ public class Claw extends SubsystemBase {
 
   public double getWristPosition() {
     return angleEncoder.getPosition();
+  }
+
+  public Command rotateWrist(States.PositionState state) {
+    return runOnce(() -> {
+      currentPosition = States.DesiredAngleMap.get(state).floatValue();
+    });
   }
 
   public void goToWristPosition(double goal_position) {

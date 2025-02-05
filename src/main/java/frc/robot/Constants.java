@@ -221,9 +221,9 @@ public final class Constants {
       }
 
       public static final class ClawConstants {
-        public static final int kAngle = 11;
-        public static final int kDrive = 9;
-        public static final double kP = 0.75;
+        public static final int CANIDAngle = 11;
+        public static final int CANIDDrive = 9;
+        public static final double kP = 0.75; // TODO
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kFF = 0;      
@@ -234,6 +234,28 @@ public final class Constants {
         public static final double kOuttakePower = -1;
         public static final double kMaxVel = 7;
         public static final double kMaxAccel = 5;
+      }
+
+      public static final class ElevatorConstants {
+        public static final int CANIDMotor1 = 11; //TODO: fix
+        public static final int CANIDMotor2 = 9;
+        public static final double kP = 0.75; // TODO
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kFF = 0;      
+        public static final double kGearRatio = (58.0/10.0) * (58.0/18.0) * (30.0/12.0); // TODO: update
+        public static final double kHeightPositionFactor = ((2 * Math.PI) / (kGearRatio)); // TODO: update
+        public static final double kPositionTolerance = 0.04; 
+        public static final double kMaxVel = 7;
+        public static final double kMaxAccel = 5;
+      }
+
+      public static final class IntakeConstants {
+        public static final int kCANID = 12;
+        public static final double kPower = 0.75;
+        public static final double kVelocityFactor = 60;
+        public static final double kNEOMaxSpeed = 5820 / 60;
+        public static final double kv = 1.0 / (kNEOMaxSpeed * kVelocityFactor);
       }
 
     public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
