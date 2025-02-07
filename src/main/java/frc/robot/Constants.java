@@ -195,16 +195,17 @@ public final class Constants {
             PositionState.Processor, 0.0
             );
 
+        // degrees
         public static Map<PositionState, Double> DesiredAngleMap = Map.of(
-                PositionState.Floor, 0.0,
+                PositionState.Floor, 100.0,
                 PositionState.Home, 0.0,
-                PositionState.L2, 0.0,
-                PositionState.L23, 0.0,
-                PositionState.L3, 0.0,
-                PositionState.L34, 0.0,
-                PositionState.L4, 0.0,
-                PositionState.Barge, 0.0,
-                PositionState.Processor, 0.0
+                PositionState.L2, 45.0,
+                PositionState.L23, 180.0,
+                PositionState.L3, 45.0,
+                PositionState.L34, 180.0,
+                PositionState.L4, 90.0,
+                PositionState.Barge, 135.0,
+                PositionState.Processor, 170.0
                 );
 
         public enum PositionState {
@@ -221,8 +222,8 @@ public final class Constants {
       }
 
       public static final class ClawConstants {
-        public static final int CANIDAngle = 11;
-        public static final int CANIDDrive = 9;
+        public static final int CANIDAngle = 9;
+        public static final int CANIDDrive = 10;
         public static final double kP = 0.75; // TODO
         public static final double kI = 0;
         public static final double kD = 0;
@@ -243,8 +244,7 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kFF = 0;      
-        public static final double kGearRatio = (58.0/10.0) * (58.0/18.0) * (30.0/12.0); // TODO: update
-        public static final double kHeightPositionFactor = ((2 * Math.PI) / (kGearRatio)); // TODO: update
+        public static final double kHeightPositionFactor = (1.76 * Math.PI);  // pitch diameter of sprocket
         public static final double kPositionTolerance = 0.04; 
         public static final double kMaxVel = 7;
         public static final double kMaxAccel = 5;

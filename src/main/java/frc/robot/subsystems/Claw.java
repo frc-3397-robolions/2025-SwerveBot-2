@@ -13,16 +13,11 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
-import com.revrobotics.spark.config.SoftLimitConfig;
-import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.wpilibj.AnalogAccelerometer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.CurrentLimit;
-import frc.robot.Constants.GlobalConstants;
 import frc.robot.Constants.States;
 import frc.robot.utilities.MathUtils;
 
@@ -40,7 +35,6 @@ public class Claw extends SubsystemBase {
   private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
   private boolean intakeDesiredOut = false;
-  private int[] values = new int[] { 1, 2, 3 };
   private boolean intakeArrived = false;
   private boolean intaking = false;
   private boolean outtaking = false;
@@ -54,8 +48,10 @@ public class Claw extends SubsystemBase {
         .inverted(false)
         .idleMode(IdleMode.kBrake);
     config.encoder
-        .positionConversionFactor(kAnglePositionFactor)
-        .velocityConversionFactor(kAnglePositionFactor);
+      .positionConversionFactor(1)
+      .velocityConversionFactor(1);
+        //.positionConversionFactor(kAnglePositionFactor)
+        //.velocityConversionFactor(kAnglePositionFactor);
     config.closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .pidf(kP, kI, kD, kFF);
@@ -102,7 +98,7 @@ public class Claw extends SubsystemBase {
       driveMotor.set(0);
 
     // Putting data on SmartDashboard
-    SmartDashboard.putNumber("Wrist Angle", angleEncoder.getPosition());
+    SmartDashboard.putNumber("Wrist Angle", getWristPosition());
     SmartDashboard.putNumber("Wrist Desired Angle", currentPosition);
     SmartDashboard.putBoolean("Intaking", intaking);
     SmartDashboard.putBoolean("Outtaking", outtaking);
@@ -125,7 +121,7 @@ public class Claw extends SubsystemBase {
 
   public Command rotateWrist(States.PositionState state) {
     return runOnce(() -> {
-      currentPosition = States.DesiredAngleMap.get(state).floatValue();
+      currentPosition = Math.toRadians(States.DesiredAngleMap.get(state).floatValue());
     });
   }
 

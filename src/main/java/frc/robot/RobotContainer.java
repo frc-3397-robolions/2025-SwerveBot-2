@@ -6,7 +6,6 @@ import frc.robot.Constants.ButtonMap;
 import frc.robot.Constants.ElevatorConstants;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -84,10 +83,10 @@ public class RobotContainer {
         setButtonAction(ButtonMap.Floor, PositionState.Floor);
         setButtonAction(ButtonMap.Processor, PositionState.Processor);
 
-        m_operatorController.button(ButtonMap.cIn).whileTrue(intake.Intake());
+        m_operatorController.button(ButtonMap.cIn).whileTrue(intake.Intake_coral());
         m_operatorController.button(ButtonMap.cOut).whileTrue(intake.Outtake());
 
-        m_operatorController.button(ButtonMap.aIn).whileTrue(intake.Intake());
+        m_operatorController.button(ButtonMap.aIn).whileTrue(intake.Intake_coral());
         m_operatorController.button(ButtonMap.aOut).whileTrue(intake.Outtake());
     }
 

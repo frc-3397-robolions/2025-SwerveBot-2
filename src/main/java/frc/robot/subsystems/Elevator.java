@@ -41,7 +41,7 @@ public class Elevator extends SubsystemBase {
         .inverted(false)
         .idleMode(IdleMode.kBrake);
     config.encoder
-        .positionConversionFactor(kHeightPositionFactor) // TODO: fix
+        .positionConversionFactor(kHeightPositionFactor) 
         .velocityConversionFactor(kHeightPositionFactor);
     config.closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)

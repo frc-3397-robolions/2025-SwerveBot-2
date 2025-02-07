@@ -1,7 +1,5 @@
 package frc.robot.utilities;
 
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkClosedLoopController;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants.OperatorConstants;
