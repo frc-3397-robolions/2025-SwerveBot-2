@@ -24,40 +24,41 @@ public class RobotContainer {
 
     /* Controllers */
     //private final Joystick driver = new Joystick(0);
-    private final CommandXboxController m_driverController = new CommandXboxController(
-      OperatorConstants.kDriverControllerPort);
+    // private final CommandXboxController m_driverController = new CommandXboxController(
+    //   OperatorConstants.kDriverControllerPort);
 
     private final CommandJoystick m_operatorController = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
 
     /* Drive Controls */
-    private final int translationAxis = XboxController.Axis.kLeftY.value;
-    private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    private final int rotationXAxis = XboxController.Axis.kRightX.value;
-    private final int rotationYAxis = XboxController.Axis.kRightY.value;
+    // private final int translationAxis = XboxController.Axis.kLeftY.value;
+    // private final int strafeAxis = XboxController.Axis.kLeftX.value;
+    // private final int rotationXAxis = XboxController.Axis.kRightX.value;
+    // private final int rotationYAxis = XboxController.Axis.kRightY.value;
 
     /* Driver Buttons */
     // private final JoystickButton robotCentric = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
 
     /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
+    // private final Swerve s_Swerve = new Swerve();
     private final Claw claw = new Claw();
-    private final Elevator elevatorMotor1 = new Elevator(ElevatorConstants.CANIDMotor1);
-    private final Elevator elevatorMotor2 = new Elevator(ElevatorConstants.CANIDMotor2);
+    //private final Elevator elevatorMotor1 = new Elevator(ElevatorConstants.CANIDMotor1);
+    //private final Elevator elevatorMotor2 = new Elevator(ElevatorConstants.CANIDMotor2);
     private final Intake intake = new Intake();
     // private final UsbCamera frontCamera;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
-        s_Swerve.setDefaultCommand(
+        /*s_Swerve.setDefaultCommand(
             new DriveRobot(
                 s_Swerve, 
                 () -> -m_driverController.getRawAxis(translationAxis), 
                 () -> -m_driverController.getRawAxis(strafeAxis), 
                 () -> -m_driverController.getRawAxis(rotationXAxis),
                 () -> -m_driverController.getRawAxis(rotationYAxis)
-                /*() -> robotCentric.getAsBoolean()*/
+                // () -> robotCentric.getAsBoolean()
             )
         );
+        */
 
         // Configure the button bindings
         configureButtonBindings();
@@ -71,7 +72,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        m_driverController.button(ButtonMap.Callibration).onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        //m_driverController.button(ButtonMap.Callibration).onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
         setButtonAction(ButtonMap.L1, PositionState.Home);
         setButtonAction(ButtonMap.L2, PositionState.L2);
@@ -79,22 +80,22 @@ public class RobotContainer {
         setButtonAction(ButtonMap.L3, PositionState.L3);
         setButtonAction(ButtonMap.L34, PositionState.L34);
         setButtonAction(ButtonMap.L4, PositionState.L4);
-        setButtonAction(ButtonMap.Barge, PositionState.Barge);
-        setButtonAction(ButtonMap.Floor, PositionState.Floor);
-        setButtonAction(ButtonMap.Processor, PositionState.Processor);
+        //setButtonAction(ButtonMap.Barge, PositionState.Barge);
+        //setButtonAction(ButtonMap.Floor, PositionState.Floor);
+        //setButtonAction(ButtonMap.Processor, PositionState.Processor);
 
         m_operatorController.button(ButtonMap.cIn).whileTrue(intake.Intake_coral());
-        m_operatorController.button(ButtonMap.cOut).whileTrue(intake.Outtake());
+        //m_operatorController.button(ButtonMap.cOut).whileTrue(intake.Outtake());
 
-        m_operatorController.button(ButtonMap.aIn).whileTrue(intake.Intake_coral());
-        m_operatorController.button(ButtonMap.aOut).whileTrue(intake.Outtake());
+        //m_operatorController.button(ButtonMap.aIn).whileTrue(intake.Intake_coral());
+        //m_operatorController.button(ButtonMap.aOut).whileTrue(intake.Outtake());
     }
 
     private void setButtonAction(int button, PositionState state)
     {
         m_operatorController.button(button).onTrue(claw.rotateWrist(state));
-        m_operatorController.button(button).onTrue(elevatorMotor1.setDesiredHeight(state));
-        m_operatorController.button(button).onTrue(elevatorMotor2.setDesiredHeight(state));
+        //m_operatorController.button(button).onTrue(elevatorMotor1.setDesiredHeight(state));
+        //m_operatorController.button(button).onTrue(elevatorMotor2.setDesiredHeight(state));
     }
 
     /**

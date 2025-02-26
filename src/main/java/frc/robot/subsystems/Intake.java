@@ -20,12 +20,22 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import static frc.robot.Constants.IntakeConstants.*;
 
+//Import required WPILib libraries
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.RobotController;
+
 public class Intake extends SubsystemBase {
   /** Creates a new Shooter. */
   private SparkMax motor;
   private RelativeEncoder encoder;
   private SparkClosedLoopController pid;
   private double desiredVelocity = 0;
+  //Create an instance of the AnalogInput class so we can read from it later
+  public AnalogInput ultrasonicSensor = new AnalogInput(0); // TODO: Check channel
+  public DigitalOutput ultrasonicSensorTrigger = new DigitalOutput(0);
+  public double ultrasonicSensorRange = 0;
+  public double voltageScaleFactor = 1;
 
   public Intake() {
 
@@ -50,13 +60,27 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Intake", encoder.getVelocity());
     pid.setReference(desiredVelocity, ControlType.kVelocity);
-  }
 
+    voltageScaleFactor = 5/RobotController.getVoltage5V(); //Calculate what percentage of 5 Volts we are actually at
+
+    // Check sensor
+    
+    if (desiredVelocity != 0)
+    {
+      ultrasonicSensorRange = ultrasonicSensor.getValue()*voltageScaleFactor*0.125;
+
+      if (ultrasonicSensorRange < distanceStop)
+      {
+        desiredVelocity = 0;
+        ultrasonicSensorTrigger.set(false);
+      }
+    }
+  }
+ 
   public Command Intake_coral() {
-    return runEnd(() -> {
-      desiredVelocity = 5820;
-    }, () -> {
-      desiredVelocity = 0;
+    return runOnce(() -> {
+      desiredVelocity = 100;
+      ultrasonicSensorTrigger.set(true);
     });
   }
 

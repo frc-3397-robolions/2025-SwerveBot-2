@@ -23,12 +23,12 @@ import frc.robot.utilities.MathUtils;
 
 import static frc.robot.Constants.ClawConstants.*;
 
+
 //import org.apache.commons.collections4.map.HashedMap;
 
 public class Claw extends SubsystemBase {
   /** Creates a new Claw. */
   private final SparkMax angleMotor;
-  private final SparkMax driveMotor;
   private final RelativeEncoder angleEncoder;
   private final SparkClosedLoopController anglePID;
   private final TrapezoidProfile profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(kMaxVel, kMaxAccel));
@@ -48,13 +48,16 @@ public class Claw extends SubsystemBase {
         .inverted(false)
         .idleMode(IdleMode.kBrake);
     config.encoder
-      .positionConversionFactor(1)
-      .velocityConversionFactor(1);
-        //.positionConversionFactor(kAnglePositionFactor)
-        //.velocityConversionFactor(kAnglePositionFactor);
+      //.positionConversionFactor(2*Math.PI)
+      //.velocityConversionFactor(2*Math.PI);
+      // TODO
+        .positionConversionFactor(kAnglePositionFactor)
+        .velocityConversionFactor(kAnglePositionFactor);
     config.closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
         .pidf(kP, kI, kD, kFF);
+        //.positionWrappingEnabled(true)
+        //.positionWrappingInputRange(0, 2*Math.PI);
 
     angleMotor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     // angleMotor.setSmartCurrentLimit(CurrentLimit.kIntakeAngle);
@@ -65,14 +68,15 @@ public class Claw extends SubsystemBase {
 
     angleEncoder = angleMotor.getEncoder();
     anglePID = angleMotor.getClosedLoopController();
-
+    
     // The motor driving the intake wheels
-    driveMotor = new SparkMax(CANIDDrive, SparkMax.MotorType.kBrushless);
-    SparkMaxConfig configDrive = new SparkMaxConfig();
-    configDrive
-        .idleMode(IdleMode.kBrake);
-    // driveMotor.setSmartCurrentLimit(CurrentLimit.kIntakeWheels);
-    // driveMotor.enableVoltageCompensation(GlobalConstants.kVoltCompensation);
+    //driveMotor = new SparkMax(CANIDDrive, SparkMax.MotorType.kBrushless);
+    //SparkMaxConfig configDrive = new SparkMaxConfig();
+    //configDrive
+    //    .idleMode(IdleMode.kBrake);
+    //driveMotor.setSmartCurrentLimit(CurrentLimit.kIntakeWheels); // TODO: do we need this
+    //driveMotor.enableVoltageCompensation(GlobalConstants.kVoltCompensation);
+    
   }
 
   @Override
@@ -90,16 +94,16 @@ public class Claw extends SubsystemBase {
 
     // Drive intake wheels based on the desired state
 
+    /*
     if (intaking)
       driveMotor.set(kIntakePower);
     else if (outtaking)
       driveMotor.set(kOuttakePower);
     else
       driveMotor.set(0);
-
+    */
     // Putting data on SmartDashboard
-    SmartDashboard.putNumber("Wrist Angle", getWristPosition());
-    SmartDashboard.putNumber("Wrist Desired Angle", currentPosition);
+    SmartDashboard.putNumber("Wrist Angle", Math.toDegrees(getWristPosition()));
     SmartDashboard.putBoolean("Intaking", intaking);
     SmartDashboard.putBoolean("Outtaking", outtaking);
     SmartDashboard.putNumber("Intake Power", angleMotor.getAppliedOutput());
@@ -116,19 +120,21 @@ public class Claw extends SubsystemBase {
   }
 
   public double getWristPosition() {
-    return angleEncoder.getPosition();
+    return angleEncoder.getPosition() ;
   }
 
   public Command rotateWrist(States.PositionState state) {
     return runOnce(() -> {
-      currentPosition = Math.toRadians(States.DesiredAngleMap.get(state).floatValue());
+      currentPosition = -1 * Math.toRadians(States.DesiredAngleMap.get(state).floatValue());
+      SmartDashboard.putNumber("Wrist Desired Angle", States.DesiredAngleMap.get(state).floatValue());
     });
   }
 
   public void goToWristPosition(double goal_position) {
     m_goal = new TrapezoidProfile.State(goal_position, 0);
-    m_setpoint = profile.calculate(0.02, m_setpoint, m_goal);
+    m_setpoint = profile.calculate(2, m_setpoint, m_goal);
     // Set the PID Controller to the corresponding angle for in/out
     anglePID.setReference(m_setpoint.position, ControlType.kPosition);
   }
+  
 }

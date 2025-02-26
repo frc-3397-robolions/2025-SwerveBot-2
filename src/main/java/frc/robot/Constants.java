@@ -43,7 +43,7 @@ public final class Constants {
       public static final double kDeadband = 0.08;
       public static final double kCubic = 0.95;
       public static final double kLinear = 0.05;
-      public static final int kOperatorControllerPort = 1;
+      public static final int kOperatorControllerPort = 0;
     }
 
     public static final class KeepAngle {
@@ -197,15 +197,15 @@ public final class Constants {
 
         // degrees
         public static Map<PositionState, Double> DesiredAngleMap = Map.of(
-                PositionState.Floor, 100.0,
+                //PositionState.Floor, 100.0,
                 PositionState.Home, 0.0,
                 PositionState.L2, 45.0,
                 PositionState.L23, 180.0,
                 PositionState.L3, 45.0,
                 PositionState.L34, 180.0,
-                PositionState.L4, 90.0,
-                PositionState.Barge, 135.0,
-                PositionState.Processor, 170.0
+                PositionState.L4, 90.0
+                //PositionState.Barge, 135.0,
+                //PositionState.Processor, 170.0
                 );
 
         public enum PositionState {
@@ -223,12 +223,12 @@ public final class Constants {
 
       public static final class ClawConstants {
         public static final int CANIDAngle = 9;
-        public static final int CANIDDrive = 10;
-        public static final double kP = 0.75; // TODO
+        public static final int CANIDDrive = 11;
+        public static final double kP = 0.5; // TODO
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kFF = 0;      
-        public static final double kGearRatio = (58.0/10.0) * (58.0/18.0) * (30.0/12.0);
+        public static final double kGearRatio = (58.0/10.0) * (58.0/18.0) * (30.0/15.0);
         public static final double kAnglePositionFactor = ((2 * Math.PI) / (kGearRatio));
         public static final double kPositionTolerance = 0.04;
         public static final double kIntakePower = 0.75;
@@ -239,7 +239,7 @@ public final class Constants {
 
       public static final class ElevatorConstants {
         public static final int CANIDMotor1 = 11; //TODO: fix
-        public static final int CANIDMotor2 = 9;
+        public static final int CANIDMotor2 = 0;
         public static final double kP = 0.75; // TODO
         public static final double kI = 0;
         public static final double kD = 0;
@@ -251,7 +251,8 @@ public final class Constants {
       }
 
       public static final class IntakeConstants {
-        public static final int kCANID = 12;
+        public static final int kCANID = 11;
+        public static final int distanceStop = 1;
         public static final double kPower = 0.75;
         public static final double kVelocityFactor = 60;
         public static final double kNEOMaxSpeed = 5820 / 60;
