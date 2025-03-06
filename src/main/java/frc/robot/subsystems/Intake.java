@@ -21,8 +21,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.IntakeConstants.*;
 
 //Import required WPILib libraries
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Intake extends SubsystemBase {
@@ -32,10 +31,7 @@ public class Intake extends SubsystemBase {
   private SparkClosedLoopController pid;
   private double desiredVelocity = 0;
   //Create an instance of the AnalogInput class so we can read from it later
-  public AnalogInput ultrasonicSensor = new AnalogInput(0); // TODO: Check channel
-  public DigitalOutput ultrasonicSensorTrigger = new DigitalOutput(0);
-  public double ultrasonicSensorRange = 0;
-  public double voltageScaleFactor = 1;
+  private DigitalInput photoelctricSensor;  // TODO: Check channel
 
   public Intake() {
 
@@ -53,37 +49,36 @@ public class Intake extends SubsystemBase {
     motor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     encoder = motor.getEncoder();
+    pid = motor.getClosedLoopController();
+
+    photoelctricSensor = new DigitalInput(3);
+
+  }
+
+  public boolean getPhotoSensor() {
+    return !photoelctricSensor.get();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
     SmartDashboard.putNumber("Intake", encoder.getVelocity());
     SmartDashboard.putNumber("Desired Intake", desiredVelocity);
-    SmartDashboard.putNumber("Ultra Sensor", ultrasonicSensorRange);
+    SmartDashboard.putBoolean("Photo Sensor", getPhotoSensor());
 
     pid.setReference(desiredVelocity, ControlType.kVelocity);
 
-    voltageScaleFactor = 5/RobotController.getVoltage5V(); //Calculate what percentage of 5 Volts we are actually at
-
     // Check sensor
-    
-    if (desiredVelocity != 0)
+    if (desiredVelocity != 0 && getPhotoSensor())
     {
-      ultrasonicSensorRange = ultrasonicSensor.getValue()*voltageScaleFactor*0.125;
-
-      if (ultrasonicSensorRange < distanceStop)
-      {
         desiredVelocity = 0;
-        ultrasonicSensorTrigger.set(false);
-      }
     }
   }
  
   public Command Intake_coral() {
     return runOnce(() -> {
       desiredVelocity = 100;
-      ultrasonicSensorTrigger.set(true);
     });
   }
 

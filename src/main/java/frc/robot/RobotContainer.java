@@ -6,13 +6,17 @@ import frc.robot.Constants.ButtonMap;
 import frc.robot.Constants.ElevatorConstants;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+
+import com.pathplanner.lib.auto.AutoBuilder;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -29,6 +33,8 @@ public class RobotContainer {
 
     private final CommandJoystick m_operatorController = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
 
+    private final SendableChooser<Command> autoChooser;
+
     /* Drive Controls */
     // private final int translationAxis = XboxController.Axis.kLeftY.value;
     // private final int strafeAxis = XboxController.Axis.kLeftX.value;
@@ -40,7 +46,7 @@ public class RobotContainer {
 
     /* Subsystems */
     // private final Swerve s_Swerve = new Swerve();
-    private final Claw claw = new Claw();
+    // private final Claw claw = new Claw();
     //private final Elevator elevatorMotor1 = new Elevator(ElevatorConstants.CANIDMotor1);
     //private final Elevator elevatorMotor2 = new Elevator(ElevatorConstants.CANIDMotor2);
     private final Intake intake = new Intake();
@@ -48,6 +54,10 @@ public class RobotContainer {
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
+
+        autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        SmartDashboard.putData("Auto Mode", autoChooser);
+
         /*s_Swerve.setDefaultCommand(
             new DriveRobot(
                 s_Swerve, 
@@ -62,6 +72,8 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+
+        //Trigger coralDetectorTrigger = new Trigger(() -> intake.getPhotoSensor());
     }
 
     /**
@@ -84,7 +96,7 @@ public class RobotContainer {
         //setButtonAction(ButtonMap.Floor, PositionState.Floor);
         //setButtonAction(ButtonMap.Processor, PositionState.Processor);
 
-        m_operatorController.button(ButtonMap.cIn).whileTrue(intake.Intake_coral());
+        m_operatorController.button(ButtonMap.cIn).onTrue(intake.Intake_coral());
         //m_operatorController.button(ButtonMap.cOut).whileTrue(intake.Outtake());
 
         //m_operatorController.button(ButtonMap.aIn).whileTrue(intake.Intake_coral());
@@ -93,7 +105,7 @@ public class RobotContainer {
 
     private void setButtonAction(int button, PositionState state)
     {
-        m_operatorController.button(button).onTrue(claw.rotateWrist(state));
+        //m_operatorController.button(button).onTrue(claw.rotateWrist(state));
         //m_operatorController.button(button).onTrue(elevatorMotor1.setDesiredHeight(state));
         //m_operatorController.button(button).onTrue(elevatorMotor2.setDesiredHeight(state));
     }
@@ -104,7 +116,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return null; // new exampleAuto(s_Swerve);
+        /* Run the path selected from the auto chooser */
+        return autoChooser.getSelected();
     }
 }

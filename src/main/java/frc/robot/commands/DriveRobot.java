@@ -12,7 +12,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
-
 public class DriveRobot extends Command {    
     private Swerve s_Swerve;    
     private DoubleSupplier translationSup;
