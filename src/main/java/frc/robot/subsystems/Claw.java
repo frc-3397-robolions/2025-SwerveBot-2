@@ -95,11 +95,11 @@ public class Claw extends SubsystemBase {
     SmartDashboard.putBoolean("moving up", elevator.movingUP);
     if(L1Involved && !elevator.ElevatorArrived && elevator.movingUP && (elevator.getHeight() > -7))
     {
-      goToWristPosition(-1 * Math.toRadians(18));
+      goToWristPosition(-1 * Math.toRadians(30));
     } 
     else if (L1Involved && !elevator.ElevatorArrived && !elevator.movingUP && (elevator.getHeight() < -4))
     {
-      goToWristPosition(-1 * Math.toRadians(18));
+      goToWristPosition(-1 * Math.toRadians(30));
     } 
     else
     {

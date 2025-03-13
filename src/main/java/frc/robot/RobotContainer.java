@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -28,48 +29,37 @@ public class RobotContainer {
 
     /* Controllers */
     //private final Joystick driver = new Joystick(0);
-    // private final CommandXboxController m_driverController = new CommandXboxController(
-    //   OperatorConstants.kDriverControllerPort);
+    private final CommandXboxController m_driverController = new CommandXboxController(
+       OperatorConstants.kDriverControllerPort);
 
     private final CommandJoystick m_operatorController = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
-
+    //private final JoystickButton robotCentric = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
     //private final SendableChooser<Command> autoChooser;
 
-    /* Drive Controls */
-    // private final int translationAxis = XboxController.Axis.kLeftY.value;
-    // private final int strafeAxis = XboxController.Axis.kLeftX.value;
-    // private final int rotationXAxis = XboxController.Axis.kRightX.value;
-    // private final int rotationYAxis = XboxController.Axis.kRightY.value;
-
-    /* Driver Buttons */
-    // private final JoystickButton robotCentric = new JoystickButton(m_operatorController, XboxController.Button.kLeftBumper.value);
-
     /* Subsystems */
-    // private final Swerve s_Swerve = new Swerve();
+    private final Swerve s_Swerve = new Swerve();
     public final Elevator elevatorMotor1 = new Elevator(ElevatorConstants.CANIDMotor1);
     public final Elevator elevatorMotor2 = new Elevator((ElevatorConstants.CANIDMotor2));
     private final Claw claw = new Claw(elevatorMotor1);
     private PositionState currentState = PositionState.Home;
     private final Intake intake = new Intake();
     // private final UsbCamera frontCamera;
-
+    
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
         //autoChooser = AutoBuilder.buildAutoChooser("Tests");
         //SmartDashboard.putData("Auto Mode", autoChooser);
 
-        /*s_Swerve.setDefaultCommand(
-            new DriveRobot(
+        s_Swerve.setDefaultCommand(
+            new TeleopSwerve(
                 s_Swerve, 
-                () -> -m_driverController.getRawAxis(translationAxis), 
-                () -> -m_driverController.getRawAxis(strafeAxis), 
-                () -> -m_driverController.getRawAxis(rotationXAxis),
-                () -> -m_driverController.getRawAxis(rotationYAxis)
-                // () -> robotCentric.getAsBoolean()
+                () -> -m_driverController.getLeftY(),
+                () -> -m_driverController.getLeftX(), 
+                () -> -m_driverController.getRightX(), 
+                () -> false
             )
         );
-        */
 
         // Configure the button bindings
         configureButtonBindings();
