@@ -155,7 +155,7 @@ public class Claw extends SubsystemBase {
     return runOnce(() -> {
       if (currentState == States.PositionState.Barge){
         L1Involved = false;
-        currentPosition += (-1 * Math.toRadians(45.0));
+        currentPosition += (Math.toRadians(45.0));
         SmartDashboard.putNumber("Wrist Desired Angle", currentPosition);
       }
     });

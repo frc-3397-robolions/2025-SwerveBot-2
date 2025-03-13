@@ -97,7 +97,7 @@ public class Intake extends SubsystemBase {
     return runEnd(() -> {
       desiredVelocity = 4000;
     }, () -> {
-      desiredVelocity = 500;
+      desiredVelocity = 1000;
     });
   }
 
