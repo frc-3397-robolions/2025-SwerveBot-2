@@ -210,13 +210,13 @@ public final class Constants {
         public static Map<PositionState, Double> DesiredHeightMap = Map.of(
             PositionState.Floor, 0.0,
             PositionState.Home, 0.0,
-            PositionState.L2, 10.0,
+            PositionState.L2, 15.0,
             PositionState.L23, 22.0,
-            PositionState.L3,25.0,
+            PositionState.L3,30.0,
             PositionState.L34, 40.0,
             PositionState.L4, 56.0,
-            PositionState.Barge, 0.0,
-            PositionState.Processor, 57.0
+            PositionState.Barge, 57.0,
+            PositionState.Processor, 7.0
             );
 
         // degrees
@@ -227,9 +227,9 @@ public final class Constants {
                 PositionState.L23, 180.0,
                 PositionState.L3, 45.0,
                 PositionState.L34, 180.0,
-                PositionState.L4, 70.0
-                //PositionState.Barge, 135.0,
-                //PositionState.Processor, 170.0
+                PositionState.L4, 70.0,
+                PositionState.Barge, 135.0,
+                PositionState.Processor, 170.0
                 );
 
         public enum PositionState {

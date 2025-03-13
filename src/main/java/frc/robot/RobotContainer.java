@@ -36,7 +36,7 @@ public class RobotContainer {
 
     private final CommandJoystick m_operatorController = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
     //private final JoystickButton robotCentric = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
-    //private final SendableChooser<Command> autoChooser;
+    private final SendableChooser<Command> autoChooser;
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -50,8 +50,8 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-        //autoChooser = AutoBuilder.buildAutoChooser("Tests");
-        //SmartDashboard.putData("Auto Mode", autoChooser);
+        autoChooser = AutoBuilder.buildAutoChooser("Forward Blue 1M");
+        SmartDashboard.putData("Auto Mode", autoChooser);
 
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
@@ -59,12 +59,12 @@ public class RobotContainer {
                 () -> -m_driverController.getLeftY(),
                 () -> -m_driverController.getLeftX(), 
                 () -> -m_driverController.getRightX(), 
-                () -> false
+                () -> true
             )
         );
 
-        frontCamera = CameraServer.startAutomaticCapture();
-        CameraServer.startAutomaticCapture("camera", 0);
+        frontCamera = CameraServer.startAutomaticCapture("camera", 0);
+        //CameraServer.startAutomaticCapture("camera", 0);
         // Configure the button bindings
         configureButtonBindings();
 
@@ -87,7 +87,7 @@ public class RobotContainer {
         setButtonAction(ButtonMap.L3, PositionState.L3);
         setButtonAction(ButtonMap.L34, PositionState.L34);
         setButtonAction(ButtonMap.L4, PositionState.L4);
-        //setButtonAction(ButtonMap.Barge, PositionState.Barge);
+        setAxisAction(ButtonMap.Barge, PositionState.Barge);
         //setButtonAction(ButtonMap.Floor, PositionState.Floor);
         setAxisAction(ButtonMap.Processor, PositionState.Processor);
 
@@ -96,7 +96,6 @@ public class RobotContainer {
 
         
         m_driverController.axisGreaterThan(ButtonMap.aIn, 0).whileTrue(intake.Intake_Algea());
-        //m_driverController.button(ButtonMap.aIn).whileTrue(intake.Intake_Algea());
         m_driverController.button(ButtonMap.aOut).whileTrue(intake.Outtake_Algea());
     }
 
@@ -109,9 +108,9 @@ public class RobotContainer {
 
     private void setAxisAction(int button, PositionState state)
     {
-        m_operatorController.axisGreaterThan(button, 0).onTrue(claw.rotateWrist(state));
-        m_operatorController.axisGreaterThan(button, 0).onTrue(elevatorMotor1.setDesiredHeight(state));
-        m_operatorController.axisGreaterThan(button,0).onTrue(elevatorMotor2.setDesiredHeight(state));
+        m_operatorController.axisMagnitudeGreaterThan(button, 0).onTrue(claw.rotateWrist(state));
+        m_operatorController.axisMagnitudeGreaterThan(button, 0).onTrue(elevatorMotor1.setDesiredHeight(state));
+        m_operatorController.axisMagnitudeGreaterThan(button,0).onTrue(elevatorMotor2.setDesiredHeight(state));
     }
 
     /**
@@ -121,6 +120,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
-        return null;//autoChooser.getSelected();
+        return autoChooser.getSelected();
     }
 }

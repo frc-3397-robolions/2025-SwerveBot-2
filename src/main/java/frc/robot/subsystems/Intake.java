@@ -97,13 +97,13 @@ public class Intake extends SubsystemBase {
     return runEnd(() -> {
       desiredVelocity = 4000;
     }, () -> {
-      desiredVelocity = 0;
+      desiredVelocity = 500;
     });
   }
 
   public Command Outtake_Algea() {
     return runEnd(() -> {
-      desiredVelocity = -4000;
+      desiredVelocity = -6000;
     }, () -> {
       desiredVelocity = 0;
     });

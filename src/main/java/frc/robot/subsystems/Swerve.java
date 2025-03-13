@@ -10,12 +10,18 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.studica.frc.AHRS;
@@ -39,10 +45,8 @@ public class Swerve extends SubsystemBase {
             
         };
         
-        Timer.delay(2.0);
-        // resetModulesToAbsolute();
-
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+        configureAutoBuilder();
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
@@ -121,6 +125,30 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public ChassisSpeeds getChassisSpeeds() {
+        return Constants.Swerve.swerveKinematics.toChassisSpeeds(getModuleStates());
+    }
+
+    private void configureAutoBuilder() {
+        
+        try{
+            var config = RobotConfig.fromGUISettings();
+            AutoBuilder.configure(
+                this::getPose,
+                this::setPose,
+                () -> getChassisSpeeds(),
+                (speeds, feedforwards) -> setModuleStates(Constants.Swerve.swerveKinematics.toSwerveModuleStates(speeds)),
+                new PPHolonomicDriveController(
+                    new PIDConstants(10, 0, 0), 
+                    new PIDConstants(7, 0, 0)),
+                config,
+                () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
+                this);
+        }catch(Exception e){
+            
+        }
+        
+    }
     @Override
     public void periodic(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
