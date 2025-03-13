@@ -143,7 +143,7 @@ public class Swerve extends SubsystemBase {
         try {
             var config = RobotConfig.fromGUISettings();
             
-            AutoBuilder.configure(
+            /*AutoBuilder.configure(
                 () -> getPose(),   // Supplier of current robot pose
                 this::setPose,         // Consumer for seeding pose against auto
                 () -> getChassisSpeed(), // Supplier of current robot speeds
@@ -159,7 +159,7 @@ public class Swerve extends SubsystemBase {
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this // Subsystem for requirements
-            );
+            );*/
         } catch (Exception ex) {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder", ex.getStackTrace());
         }

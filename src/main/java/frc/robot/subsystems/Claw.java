@@ -19,13 +19,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.States;
+import frc.robot.Constants.States.PositionState;
 import frc.robot.utilities.MathUtils;
 
 import static frc.robot.Constants.ClawConstants.*;
 
 
 //import org.apache.commons.collections4.map.HashedMap;
-
 public class Claw extends SubsystemBase {
   /** Creates a new Claw. */
   private final SparkMax angleMotor;
@@ -39,8 +39,14 @@ public class Claw extends SubsystemBase {
   private boolean intaking = false;
   private boolean outtaking = false;
   private double currentPosition = 0.0;
+  private PositionState currentState = PositionState.Home;
+  private Elevator elevator;
+  private boolean at12Deg = false;
 
-  public Claw() {
+  private boolean L1Involved = true;
+
+  public Claw(Elevator elevatorIn) {
+    elevator = elevatorIn;
     // The motor controlling the angle of the assembly
     angleMotor = new SparkMax(CANIDAngle, SparkMax.MotorType.kBrushless);
     SparkMaxConfig config = new SparkMaxConfig();
@@ -85,7 +91,20 @@ public class Claw extends SubsystemBase {
     // If the intake is within tolerance of it's desired angle, set this variable to
     // true so other files can act
 
-    goToWristPosition(currentPosition);
+    SmartDashboard.putBoolean("Elevator Arrived", elevator.ElevatorArrived);
+    SmartDashboard.putBoolean("moving up", elevator.movingUP);
+    if(L1Involved && !elevator.ElevatorArrived && elevator.movingUP && (elevator.getHeight() > -7))
+    {
+      goToWristPosition(-1 * Math.toRadians(18));
+    } 
+    else if (L1Involved && !elevator.ElevatorArrived && !elevator.movingUP && (elevator.getHeight() < -4))
+    {
+      goToWristPosition(-1 * Math.toRadians(18));
+    } 
+    else
+    {
+      goToWristPosition(currentPosition);
+    }
 
     if (MathUtils.angleInRange(angleEncoder.getPosition(), currentPosition, kPositionTolerance))
       intakeArrived = true;
@@ -125,8 +144,10 @@ public class Claw extends SubsystemBase {
 
   public Command rotateWrist(States.PositionState state) {
     return runOnce(() -> {
+      L1Involved = currentState == PositionState.Home || state == PositionState.Home;
       currentPosition = -1 * Math.toRadians(States.DesiredAngleMap.get(state).floatValue());
       SmartDashboard.putNumber("Wrist Desired Angle", States.DesiredAngleMap.get(state).floatValue());
+      currentState = state;
     });
   }
 

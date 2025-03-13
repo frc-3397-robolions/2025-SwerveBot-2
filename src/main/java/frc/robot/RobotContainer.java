@@ -33,7 +33,7 @@ public class RobotContainer {
 
     private final CommandJoystick m_operatorController = new CommandJoystick(OperatorConstants.kOperatorControllerPort);
 
-    private final SendableChooser<Command> autoChooser;
+    //private final SendableChooser<Command> autoChooser;
 
     /* Drive Controls */
     // private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -46,17 +46,18 @@ public class RobotContainer {
 
     /* Subsystems */
     // private final Swerve s_Swerve = new Swerve();
-    // private final Claw claw = new Claw();
-    //private final Elevator elevatorMotor1 = new Elevator(ElevatorConstants.CANIDMotor1);
-    //private final Elevator elevatorMotor2 = new Elevator(ElevatorConstants.CANIDMotor2);
+    public final Elevator elevatorMotor1 = new Elevator(ElevatorConstants.CANIDMotor1);
+    public final Elevator elevatorMotor2 = new Elevator((ElevatorConstants.CANIDMotor2));
+    private final Claw claw = new Claw(elevatorMotor1);
+    private PositionState currentState = PositionState.Home;
     private final Intake intake = new Intake();
     // private final UsbCamera frontCamera;
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-        autoChooser = AutoBuilder.buildAutoChooser("Tests");
-        SmartDashboard.putData("Auto Mode", autoChooser);
+        //autoChooser = AutoBuilder.buildAutoChooser("Tests");
+        //SmartDashboard.putData("Auto Mode", autoChooser);
 
         /*s_Swerve.setDefaultCommand(
             new DriveRobot(
@@ -97,7 +98,7 @@ public class RobotContainer {
         //setButtonAction(ButtonMap.Processor, PositionState.Processor);
 
         m_operatorController.button(ButtonMap.cIn).onTrue(intake.Intake_coral());
-        //m_operatorController.button(ButtonMap.cOut).whileTrue(intake.Outtake());
+        m_operatorController.button(ButtonMap.cOut).whileTrue(intake.Outtake());
 
         //m_operatorController.button(ButtonMap.aIn).whileTrue(intake.Intake_coral());
         //m_operatorController.button(ButtonMap.aOut).whileTrue(intake.Outtake());
@@ -105,9 +106,10 @@ public class RobotContainer {
 
     private void setButtonAction(int button, PositionState state)
     {
-        //m_operatorController.button(button).onTrue(claw.rotateWrist(state));
-        //m_operatorController.button(button).onTrue(elevatorMotor1.setDesiredHeight(state));
-        //m_operatorController.button(button).onTrue(elevatorMotor2.setDesiredHeight(state));
+        m_operatorController.button(button).onTrue(claw.rotateWrist(state));
+        m_operatorController.button(button).onTrue(elevatorMotor1.setDesiredHeight(state));
+        m_operatorController.button(button).onTrue(elevatorMotor2.setDesiredHeight(state));
+
     }
 
     /**
@@ -117,6 +119,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         /* Run the path selected from the auto chooser */
-        return autoChooser.getSelected();
+        return null;//autoChooser.getSelected();
     }
 }

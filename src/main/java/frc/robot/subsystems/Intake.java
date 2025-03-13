@@ -33,6 +33,7 @@ public class Intake extends SubsystemBase {
   //Create an instance of the AnalogInput class so we can read from it later
   private DigitalInput photoelctricSensor;  // TODO: Check channel
 
+  boolean intakeCoral = false;
   public Intake() {
 
     motor = new SparkMax(kCANID, SparkMax.MotorType.kBrushless);
@@ -51,7 +52,7 @@ public class Intake extends SubsystemBase {
     encoder = motor.getEncoder();
     pid = motor.getClosedLoopController();
 
-    photoelctricSensor = new DigitalInput(3);
+    photoelctricSensor = new DigitalInput(0);
 
   }
 
@@ -70,21 +71,29 @@ public class Intake extends SubsystemBase {
     pid.setReference(desiredVelocity, ControlType.kVelocity);
 
     // Check sensor
-    if (desiredVelocity != 0 && getPhotoSensor())
+    if (intakeCoral && desiredVelocity != 0 && getPhotoSensor())
     {
         desiredVelocity = 0;
+        intakeCoral = false;
     }
   }
  
   public Command Intake_coral() {
     return runOnce(() -> {
-      desiredVelocity = 100;
+      desiredVelocity = -2000;
+      intakeCoral = true;
+    });
+  }
+
+  public Command Outtake_coral() {
+    return runOnce(() -> {
+      desiredVelocity = 1000;
     });
   }
 
   public Command Outtake() {
     return runEnd(() -> {
-      desiredVelocity = -5820;
+      desiredVelocity = -2000;
     }, () -> {
       desiredVelocity = 0;
     });

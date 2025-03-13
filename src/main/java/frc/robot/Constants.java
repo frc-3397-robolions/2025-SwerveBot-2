@@ -183,14 +183,15 @@ public final class Constants {
 
       public static final class States {
         
+        // inches
         public static Map<PositionState, Double> DesiredHeightMap = Map.of(
             PositionState.Floor, 0.0,
             PositionState.Home, 0.0,
-            PositionState.L2, 0.0,
-            PositionState.L23, 0.0,
-            PositionState.L3, 0.0,
-            PositionState.L34, 0.0,
-            PositionState.L4, 0.0,
+            PositionState.L2, 5.00,
+            PositionState.L23, 8.0,
+            PositionState.L3,10.0,
+            PositionState.L34, 10.0,
+            PositionState.L4, 15.0,
             PositionState.Barge, 0.0,
             PositionState.Processor, 0.0
             );
@@ -233,25 +234,25 @@ public final class Constants {
         public static final double kPositionTolerance = 0.04;
         public static final double kIntakePower = 0.75;
         public static final double kOuttakePower = -1;
-        public static final double kMaxVel = 7;
+        public static final double kMaxVel = 3;
         public static final double kMaxAccel = 5;
       }
 
       public static final class ElevatorConstants {
         public static final int CANIDMotor1 = 13; //TODO: fix
         public static final int CANIDMotor2 = 14;
-        public static final double kP = 0.75; // TODO
+        public static final double kP = 0.1; // TODO
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kFF = 0;      
-        public static final double kHeightPositionFactor = (1.76 * Math.PI);  // pitch diameter of sprocket
+        public static final double kHeightPositionFactor = ((16.0/22.0) * (1/7.6) * (1.76 * Math.PI)) * 1.62;  // pitch diameter of sprocket
         public static final double kPositionTolerance = 0.04; 
-        public static final double kMaxVel = 7;
-        public static final double kMaxAccel = 5;
+        public static final double kMaxVel = .1;
+        public static final double kMaxAccel = .1;
       }
 
       public static final class IntakeConstants {
-        public static final int kCANID = 11;
+        public static final int kCANID = 16;
         public static final int distanceStop = 1;
         public static final double kPower = 0.75;
         public static final double kVelocityFactor = 60;

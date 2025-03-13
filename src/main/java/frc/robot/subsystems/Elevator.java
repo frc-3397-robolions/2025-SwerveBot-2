@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.States;
+import frc.robot.utilities.MathUtils;
 
 import static frc.robot.Constants.ElevatorConstants.*;
 
@@ -32,6 +33,9 @@ public class Elevator extends SubsystemBase {
   private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
   private double currentPosition = 0.0;
+
+  public boolean movingUP = false;
+  public boolean ElevatorArrived = false;
 
   public Elevator(int motorCANID) {
     // The motor controlling the angle of the assembly
@@ -65,9 +69,18 @@ public class Elevator extends SubsystemBase {
     // If the intake is within tolerance of it's desired angle, set this variable to
     // true so other files can act
 
+    if (Math.abs(getHeight() - currentPosition) <= 0.1)
+    {
+      ElevatorArrived = true;
+      movingUP = false;
+    }
+    else
+      ElevatorArrived = false;
+
     goToHeight(currentPosition);
 
     // Putting data on SmartDashboard
+    //SmartDashboard.putNumber("Elevator Encoder", encoder.)
     SmartDashboard.putNumber("Height", encoder.getPosition());
     SmartDashboard.putNumber("Desired Height", currentPosition);
   }
@@ -88,13 +101,14 @@ public class Elevator extends SubsystemBase {
 
   public Command setDesiredHeight(States.PositionState state) {
     return runOnce(() -> {
-      currentPosition = States.DesiredHeightMap.get(state).floatValue();
+      movingUP = (-1 * States.DesiredHeightMap.get(state).floatValue()) < currentPosition;
+      currentPosition = -1 * States.DesiredHeightMap.get(state).floatValue();
     });
   }
 
   public void goToHeight(double goal_position) {
     m_goal = new TrapezoidProfile.State(goal_position, 0);
-    m_setpoint = profile.calculate(0.02, m_setpoint, m_goal);
+    m_setpoint = profile.calculate(5, m_setpoint, m_goal);
     // Set the PID Controller to the corresponding angle for in/out
     heightPID.setReference(m_setpoint.position, ControlType.kPosition);
   }
