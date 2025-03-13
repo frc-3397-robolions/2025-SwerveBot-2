@@ -85,12 +85,6 @@ public class Intake extends SubsystemBase {
     });
   }
 
-  public Command Outtake_coral() {
-    return runOnce(() -> {
-      desiredVelocity = 1000;
-    });
-  }
-
   public Command Outtake() {
     return runEnd(() -> {
       desiredVelocity = -2000;
@@ -99,11 +93,19 @@ public class Intake extends SubsystemBase {
     });
   }
 
-  public Command autoShoot(double time) {
+  public Command Intake_Algea() {
     return runEnd(() -> {
-      desiredVelocity = 5820 * 0.75;
+      desiredVelocity = 4000;
     }, () -> {
       desiredVelocity = 0;
-    }).withTimeout(time);
+    });
+  }
+
+  public Command Outtake_Algea() {
+    return runEnd(() -> {
+      desiredVelocity = -4000;
+    }, () -> {
+      desiredVelocity = 0;
+    });
   }
 }

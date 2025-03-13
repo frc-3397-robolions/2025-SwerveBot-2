@@ -4,6 +4,8 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.Constants.States.PositionState;
 import frc.robot.Constants.ButtonMap;
 import frc.robot.Constants.ElevatorConstants;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -43,7 +45,7 @@ public class RobotContainer {
     private final Claw claw = new Claw(elevatorMotor1);
     private PositionState currentState = PositionState.Home;
     private final Intake intake = new Intake();
-    // private final UsbCamera frontCamera;
+    private final UsbCamera frontCamera;
     
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -61,6 +63,8 @@ public class RobotContainer {
             )
         );
 
+        frontCamera = CameraServer.startAutomaticCapture();
+        CameraServer.startAutomaticCapture("camera", 0);
         // Configure the button bindings
         configureButtonBindings();
 
@@ -85,13 +89,15 @@ public class RobotContainer {
         setButtonAction(ButtonMap.L4, PositionState.L4);
         //setButtonAction(ButtonMap.Barge, PositionState.Barge);
         //setButtonAction(ButtonMap.Floor, PositionState.Floor);
-        //setButtonAction(ButtonMap.Processor, PositionState.Processor);
+        setAxisAction(ButtonMap.Processor, PositionState.Processor);
 
         m_operatorController.button(ButtonMap.cIn).onTrue(intake.Intake_coral());
         m_operatorController.button(ButtonMap.cOut).whileTrue(intake.Outtake());
 
-        //m_operatorController.button(ButtonMap.aIn).whileTrue(intake.Intake_coral());
-        //m_operatorController.button(ButtonMap.aOut).whileTrue(intake.Outtake());
+        
+        m_driverController.axisGreaterThan(ButtonMap.aIn, 0).whileTrue(intake.Intake_Algea());
+        //m_driverController.button(ButtonMap.aIn).whileTrue(intake.Intake_Algea());
+        m_driverController.button(ButtonMap.aOut).whileTrue(intake.Outtake_Algea());
     }
 
     private void setButtonAction(int button, PositionState state)
@@ -99,7 +105,13 @@ public class RobotContainer {
         m_operatorController.button(button).onTrue(claw.rotateWrist(state));
         m_operatorController.button(button).onTrue(elevatorMotor1.setDesiredHeight(state));
         m_operatorController.button(button).onTrue(elevatorMotor2.setDesiredHeight(state));
+    }
 
+    private void setAxisAction(int button, PositionState state)
+    {
+        m_operatorController.axisGreaterThan(button, 0).onTrue(claw.rotateWrist(state));
+        m_operatorController.axisGreaterThan(button, 0).onTrue(elevatorMotor1.setDesiredHeight(state));
+        m_operatorController.axisGreaterThan(button,0).onTrue(elevatorMotor2.setDesiredHeight(state));
     }
 
     /**

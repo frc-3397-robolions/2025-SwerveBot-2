@@ -67,10 +67,10 @@ public final class Constants {
         public static final double wheelCircumference = chosenModule.wheelCircumference;
 
         // Locations for the swerve drive modules relative to the robot center.
-        public static Translation2d m_frontLeftLocation = new Translation2d(wheelBase / 2.0, trackWidth / 2.0);
-        public static Translation2d m_frontRightLocation = new Translation2d(wheelBase / 2.0, -trackWidth / 2.0);
-        public static Translation2d m_backLeftLocation = new Translation2d(-wheelBase / 2.0, trackWidth / 2.0);
-        public static Translation2d m_backRightLocation = new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0);
+        public static Translation2d m_frontLeftLocation = new Translation2d(-wheelBase / 2.0, trackWidth / 2.0);
+        public static Translation2d m_frontRightLocation = new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0);
+        public static Translation2d m_backLeftLocation = new Translation2d(wheelBase / 2.0, trackWidth / 2.0);
+        public static Translation2d m_backRightLocation = new Translation2d(wheelBase / 2.0, -trackWidth / 2.0);
 
         /* Swerve Kinematics 
          * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */
@@ -95,7 +95,7 @@ public final class Constants {
         public static final double angleCurrentThresholdTime = 0.1;
         public static final boolean angleEnableCurrentLimit = true;
 
-        public static final int driveCurrentLimit = 35;
+        public static final int driveCurrentLimit = 60;
         public static final int driveCurrentThreshold = 60;
         public static final double driveCurrentThresholdTime = 0.1;
         public static final boolean driveEnableCurrentLimit = true;
@@ -210,13 +210,13 @@ public final class Constants {
         public static Map<PositionState, Double> DesiredHeightMap = Map.of(
             PositionState.Floor, 0.0,
             PositionState.Home, 0.0,
-            PositionState.L2, 5.00,
-            PositionState.L23, 8.0,
-            PositionState.L3,10.0,
-            PositionState.L34, 10.0,
-            PositionState.L4, 15.0,
+            PositionState.L2, 10.0,
+            PositionState.L23, 22.0,
+            PositionState.L3,25.0,
+            PositionState.L34, 40.0,
+            PositionState.L4, 56.0,
             PositionState.Barge, 0.0,
-            PositionState.Processor, 0.0
+            PositionState.Processor, 57.0
             );
 
         // degrees
@@ -227,7 +227,7 @@ public final class Constants {
                 PositionState.L23, 180.0,
                 PositionState.L3, 45.0,
                 PositionState.L34, 180.0,
-                PositionState.L4, 90.0
+                PositionState.L4, 70.0
                 //PositionState.Barge, 135.0,
                 //PositionState.Processor, 170.0
                 );
@@ -272,6 +272,7 @@ public final class Constants {
         public static final double kPositionTolerance = 0.04; 
         public static final double kMaxVel = .1;
         public static final double kMaxAccel = .1;
+        public static final double maxHeight = 57;
       }
 
       public static final class IntakeConstants {
