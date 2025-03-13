@@ -151,6 +151,15 @@ public class Claw extends SubsystemBase {
     });
   }
 
+  public Command flickWrist() {
+    return runOnce(() -> {
+      if (currentState == States.PositionState.Barge){
+        L1Involved = false;
+        currentPosition += (-1 * Math.toRadians(45.0));
+        SmartDashboard.putNumber("Wrist Desired Angle", currentPosition);
+      }
+    });
+  }
   public void goToWristPosition(double goal_position) {
     m_goal = new TrapezoidProfile.State(goal_position, 0);
     m_setpoint = profile.calculate(2, m_setpoint, m_goal);

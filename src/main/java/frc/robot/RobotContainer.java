@@ -50,7 +50,7 @@ public class RobotContainer {
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
-        autoChooser = AutoBuilder.buildAutoChooser("Forward Blue 1M");
+        autoChooser = AutoBuilder.buildAutoChooser("Forward Red 1M");
         SmartDashboard.putData("Auto Mode", autoChooser);
 
         s_Swerve.setDefaultCommand(
@@ -88,7 +88,7 @@ public class RobotContainer {
         setButtonAction(ButtonMap.L34, PositionState.L34);
         setButtonAction(ButtonMap.L4, PositionState.L4);
         setAxisAction(ButtonMap.Barge, PositionState.Barge);
-        //setButtonAction(ButtonMap.Floor, PositionState.Floor);
+        setAxisAction(ButtonMap.Floor, PositionState.Floor);
         setAxisAction(ButtonMap.Processor, PositionState.Processor);
 
         m_operatorController.button(ButtonMap.cIn).onTrue(intake.Intake_coral());
@@ -97,6 +97,7 @@ public class RobotContainer {
         
         m_driverController.axisGreaterThan(ButtonMap.aIn, 0).whileTrue(intake.Intake_Algea());
         m_driverController.button(ButtonMap.aOut).whileTrue(intake.Outtake_Algea());
+        m_driverController.button(ButtonMap.aOut).onTrue(claw.flickWrist());
     }
 
     private void setButtonAction(int button, PositionState state)

@@ -208,7 +208,7 @@ public final class Constants {
         
         // inches
         public static Map<PositionState, Double> DesiredHeightMap = Map.of(
-            PositionState.Floor, 0.0,
+            PositionState.Floor, 10.0,
             PositionState.Home, 0.0,
             PositionState.L2, 15.0,
             PositionState.L23, 22.0,
@@ -221,14 +221,14 @@ public final class Constants {
 
         // degrees
         public static Map<PositionState, Double> DesiredAngleMap = Map.of(
-                //PositionState.Floor, 100.0,
+                PositionState.Floor, 180.0,
                 PositionState.Home, 0.0,
                 PositionState.L2, 45.0,
                 PositionState.L23, 180.0,
                 PositionState.L3, 45.0,
                 PositionState.L34, 180.0,
                 PositionState.L4, 70.0,
-                PositionState.Barge, 135.0,
+                PositionState.Barge, 90.0,
                 PositionState.Processor, 170.0
                 );
 
