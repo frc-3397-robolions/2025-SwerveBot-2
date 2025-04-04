@@ -6,6 +6,8 @@ import frc.robot.Constants.ButtonMap;
 import frc.robot.Constants.ElevatorConstants;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -20,6 +22,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,17 +54,36 @@ public class RobotContainer {
     public RobotContainer() {
 
         autoChooser = AutoBuilder.buildAutoChooser("Forward Red 1M");
+        /*Adds autos to autochooser to show on Smart Dashboard 
+         * name is what you want it to show on dashboard. autoname is the pathplanner name */
+        autoChooser.addOption("Forward Blue 1M", new PathPlannerAuto("Forward Blue 1M")); 
+    
         SmartDashboard.putData("Auto Mode", autoChooser);
 
-        s_Swerve.setDefaultCommand(
-            new TeleopSwerve(
-                s_Swerve, 
-                () -> -m_driverController.getLeftY(),
-                () -> -m_driverController.getLeftX(), 
-                () -> -m_driverController.getRightX(), 
-                () -> true
-            )
-        );
+        if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue)
+        {
+            s_Swerve.setDefaultCommand(
+                new TeleopSwerve(
+                    s_Swerve, 
+                    () -> -m_driverController.getLeftY(),
+                    () -> -m_driverController.getLeftX(), 
+                    () -> -m_driverController.getRightX(), 
+                    () -> true
+                )
+            );
+        }
+        else if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red)
+        {
+            s_Swerve.setDefaultCommand(
+                new TeleopSwerve(
+                    s_Swerve, 
+                    () -> m_driverController.getLeftY(),
+                    () -> m_driverController.getLeftX(), 
+                    () -> m_driverController.getRightX(), 
+                    () -> true
+                )
+            );
+        }
 
         frontCamera = CameraServer.startAutomaticCapture("camera", 0);
         //CameraServer.startAutomaticCapture("camera", 0);
@@ -95,9 +117,13 @@ public class RobotContainer {
         m_operatorController.button(ButtonMap.cOut).whileTrue(intake.Outtake());
 
         
-        m_driverController.axisGreaterThan(ButtonMap.aIn, 0).whileTrue(intake.Intake_Algea());
+        m_driverController.button(ButtonMap.aIn).whileTrue(intake.Intake_Algea());
         m_driverController.button(ButtonMap.aOut).whileTrue(intake.Outtake_Algea());
         m_driverController.button(ButtonMap.aOut).onTrue(claw.flickWrist());
+
+        m_driverController.button(4).onTrue(s_Swerve.invertControlsCommand());
+
+        m_driverController.button(8).onTrue(s_Swerve.resetModulesToAbsolute());
     }
 
     private void setButtonAction(int button, PositionState state)

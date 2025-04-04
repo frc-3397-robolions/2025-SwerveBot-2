@@ -15,7 +15,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public class SwerveModule {
     public int moduleNumber;
-    private Rotation2d angleOffset;
+    public Rotation2d angleOffset;
 
     private TalonFX mAngleMotor;
     private TalonFX mDriveMotor;
@@ -50,7 +50,7 @@ public class SwerveModule {
     }
 
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
-        desiredState.optimize(getState().angle);
+        //desiredState.optimize(getState().angle);
         mAngleMotor.setControl(anglePosition.withPosition(desiredState.angle.getRotations()));
         setSpeed(desiredState, isOpenLoop);
     }
