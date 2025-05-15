@@ -22,6 +22,13 @@ import frc.robot.Constants.States;
 import frc.robot.utilities.MathUtils;
 
 import static frc.robot.Constants.ElevatorConstants.*;
+import static frc.robot.Constants.States.DesiredHeightMap;
+
+import java.lang.Thread.State;
+
+import static frc.robot.Constants.States;
+
+
 
 //import org.apache.commons.collections4.map.HashedMap;
 
@@ -33,9 +40,13 @@ public class Elevator extends SubsystemBase {
   private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
   private double currentPosition = 0.0;
+  private States.PositionState ledPositionState = States.PositionState.Barge;
 
   public boolean movingUP = false;
   public boolean ElevatorArrived = false;
+  public static double ledModifier = .2;
+  
+
 
   public Elevator(int motorCANID) {
     // The motor controlling the angle of the assembly
@@ -65,7 +76,8 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
-
+    
+    ledModifier = Math.max(.01,-1*getHeight()/States.DesiredHeightMap.get(ledPositionState).floatValue());
     // If the intake is within tolerance of it's desired angle, set this variable to
     // true so other files can act
 
@@ -83,6 +95,7 @@ public class Elevator extends SubsystemBase {
     //SmartDashboard.putNumber("Elevator Encoder", encoder.)
     SmartDashboard.putNumber("Height", encoder.getPosition());
     SmartDashboard.putNumber("Desired Height", currentPosition);
+    SmartDashboard.putNumber("LED", ledModifier);
   }
 
   //public boolean getIntakeArrived() {

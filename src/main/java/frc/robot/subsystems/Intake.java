@@ -15,13 +15,16 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import static frc.robot.Constants.IntakeConstants.*;
 
 //Import required WPILib libraries
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.RobotController;
 
 public class Intake extends SubsystemBase {
@@ -34,8 +37,10 @@ public class Intake extends SubsystemBase {
   private DigitalInput photoelctricSensor;  // TODO: Check channel
 
   boolean intakeCoral = false;
-  public Intake() {
+  
 
+  public Intake() {
+    SmartDashboard.putData("call it", Outtake_Algea());
     motor = new SparkMax(kCANID, SparkMax.MotorType.kBrushless);
     SparkMaxConfig config = new SparkMaxConfig();
     config
@@ -67,7 +72,6 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Intake", encoder.getVelocity());
     SmartDashboard.putNumber("Desired Intake", desiredVelocity);
     SmartDashboard.putBoolean("Photo Sensor", getPhotoSensor());
-
     pid.setReference(desiredVelocity, ControlType.kVelocity);
 
     // Check sensor
@@ -75,6 +79,7 @@ public class Intake extends SubsystemBase {
     {
         desiredVelocity = 0;
         intakeCoral = false;
+        
     }
   }
  
@@ -88,6 +93,13 @@ public class Intake extends SubsystemBase {
   public Command Outtake() {
     return runEnd(() -> {
       desiredVelocity = -2000;
+    }, () -> {
+      desiredVelocity = 0;
+    });
+  }
+  public Command OuttakeStop() {
+    return runEnd(() -> {
+      desiredVelocity = 0;
     }, () -> {
       desiredVelocity = 0;
     });
@@ -108,4 +120,6 @@ public class Intake extends SubsystemBase {
       desiredVelocity = 0;
     });
   }
+  
+
 }
