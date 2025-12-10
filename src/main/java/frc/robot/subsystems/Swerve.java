@@ -138,6 +138,12 @@ public class Swerve extends SubsystemBase {
             }
         );
     }
+    public Command zeroHeadingCMD(){
+        return runOnce(() -> {
+            zeroHeading();
+            }
+        );
+    }
 
     public void resetToAbsolute(){
         for(SwerveModule mod : mSwerveMods){
@@ -164,6 +170,7 @@ public class Swerve extends SubsystemBase {
                 config,
                 () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red,
                 this);
+            
         }catch(Exception e){
             
         }

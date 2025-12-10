@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 7.1,
-        "y": 4.0
+        "y": 4.19
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.85,
-        "y": 4.0
+        "y": 4.19
       },
-      "isLocked": false,
+      "isLocked": true,
       "linkedName": null
     },
     {
       "anchor": {
         "x": 6.0016,
-        "y": 4.0
+        "y": 4.19
       },
       "prevControl": {
         "x": 6.2516,
-        "y": 4.0
+        "y": 4.19
       },
       "nextControl": null,
       "isLocked": true,
-      "linkedName": "end of l4 link"
+      "linkedName": "Back Coral Right 1"
     }
   ],
   "rotationTargets": [],

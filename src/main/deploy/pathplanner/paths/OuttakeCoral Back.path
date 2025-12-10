@@ -3,37 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.1,
+        "x": 6.0016,
         "y": 4.0
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.85,
-        "y": 4.0
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.0016,
-        "y": 4.0
-      },
-      "prevControl": {
         "x": 6.2516,
         "y": 4.0
       },
-      "nextControl": null,
       "isLocked": true,
       "linkedName": "end of l4 link"
+    },
+    {
+      "anchor": {
+        "x": 7.0,
+        "y": 4.0
+      },
+      "prevControl": {
+        "x": 6.75,
+        "y": 4.0
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [
     {
       "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.35204081632653134,
-      "maxWaypointRelativePos": 0.8540816326530634,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.5343537414965962,
       "constraints": {
         "maxVelocity": 0.3,
         "maxAcceleration": 0.3,
@@ -47,23 +47,23 @@
   "pointTowardsZones": [],
   "eventMarkers": [
     {
-      "name": "elevatorL4",
-      "waypointRelativePos": 0.10170068027210914,
+      "name": "OuttakeCoralAutoStop",
+      "waypointRelativePos": 0.0,
       "endWaypointRelativePos": null,
       "command": null
     },
     {
-      "name": "OuttakeCoralAutoStart",
-      "waypointRelativePos": 0.99,
+      "name": "elevatorHome",
+      "waypointRelativePos": 0.3044217687074809,
       "endWaypointRelativePos": null,
       "command": null
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 1.0,
-    "maxAcceleration": 1.0,
+    "maxVelocity": 2.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 150.0,
-    "maxAngularAcceleration": 150.0,
+    "maxAngularAcceleration": 250.0,
     "nominalVoltage": 12.0,
     "unlimited": false
   },

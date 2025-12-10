@@ -39,7 +39,7 @@ public class TeleopSwerve extends Command {
         {
             translationVal = -translationVal;
             strafeVal = -strafeVal;
-            rotationVal = -rotationVal;
+            //rotationVal = -rotationVal;
         }
         
         /* Drive */

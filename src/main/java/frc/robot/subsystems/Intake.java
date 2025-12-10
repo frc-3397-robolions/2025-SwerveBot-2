@@ -97,6 +97,18 @@ public class Intake extends SubsystemBase {
       desiredVelocity = 0;
     });
   }
+
+  public Command OuttakeAutoStart() {
+    return runOnce(() -> {
+      desiredVelocity = -2000;
+    });
+  }
+  public Command OuttakeAutoStop() {
+    return runOnce(() -> {
+      desiredVelocity = 0;
+    });
+  }
+
   public Command OuttakeStop() {
     return runEnd(() -> {
       desiredVelocity = 0;

@@ -64,6 +64,9 @@ public class RobotContainer {
         //intaking and outtaking coral and algae in auto
         NamedCommands.registerCommand("intakeCoralNamed", intake.Intake_coral().asProxy());
         
+        new EventTrigger("OuttakeCoralAutoStart").onTrue(intake.OuttakeAutoStart());
+        new EventTrigger("OuttakeCoralAutoStop").onTrue(intake.OuttakeAutoStop());
+
         new EventTrigger("outtakeAlgae").whileTrue(intake.Outtake_Algea());
         new EventTrigger("intakeCoral").onTrue(intake.Intake_coral());
         new EventTrigger("intakeAlgae").whileTrue(intake.Intake_Algea());
@@ -104,7 +107,7 @@ public class RobotContainer {
         //new EventTrigger("outtakeAlgae").whileTrue(Commands.runOnce(()->{SmartDashboard.autoWorking = true;}));
         //autoChooser = AutoBuilder.buildAutoChooser("New New New Auto");
        
-        autoChooser = AutoBuilder.buildAutoChooser("L4 and Processor");
+        autoChooser = AutoBuilder.buildAutoChooser("Back L4 Right");
         /*Adds autos to autochooser to show on Smart Dashboard 
          * name is what you want it to show on dashboard. autoname is the pathplanner name */
         autoChooser.addOption("Test Named Command", AutoBuilder.buildAuto("Test Named Command"));
@@ -115,8 +118,8 @@ public class RobotContainer {
     
         SmartDashboard.putBoolean("autoWorking", false);
 
-        if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue)
-        {
+        //if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Blue)
+        //{ 
             s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
                     s_Swerve, 
@@ -126,10 +129,10 @@ public class RobotContainer {
                     () -> true
                 )
             );
-        }
-        else if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red)
-        {
-            s_Swerve.setDefaultCommand(
+        //}
+        //else if (DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red)
+        //{
+            /*s_Swerve.setDefaultCommand(
                 new TeleopSwerve(
                     s_Swerve, 
                     () -> m_driverController.getLeftY(),
@@ -137,8 +140,8 @@ public class RobotContainer {
                     () -> m_driverController.getRightX(), 
                     () -> true
                 )
-            );
-        }
+            );*/
+        //}
         
         // frontCamera = CameraServer.startAutomaticCapture("camera", 0);
         //CameraServer.startAutomaticCapture("camera", 0);
@@ -178,7 +181,7 @@ public class RobotContainer {
 
         m_driverController.button(4).onTrue(s_Swerve.invertControlsCommand());
 
-        m_driverController.button(8).onTrue(s_Swerve.resetModulesToAbsolute());
+        m_driverController.button(8).onTrue(s_Swerve.zeroHeadingCMD());
     }
 
     private void setButtonAction(int button, PositionState state)

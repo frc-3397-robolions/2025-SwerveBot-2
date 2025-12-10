@@ -270,8 +270,8 @@ public final class Constants {
         public static final double kFF = 0;      
         public static final double kHeightPositionFactor = ((16.0/22.0) * (1/7.6) * (1.76 * Math.PI)) * 1.62;  // pitch diameter of sprocket
         public static final double kPositionTolerance = 0.04; 
-        public static final double kMaxVel = .1;
-        public static final double kMaxAccel = .1;
+        public static final double kMaxVel = .15;
+        public static final double kMaxAccel = .15;
         public static final double maxHeight = 57;
       }
 

@@ -39,7 +39,7 @@ public class Elevator extends SubsystemBase {
   private final TrapezoidProfile profile = new TrapezoidProfile(new TrapezoidProfile.Constraints(kMaxVel, kMaxAccel));
   private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
   private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
-  private double currentPosition = 0.0;
+  public double currentPosition = 0.0;
   private States.PositionState ledPositionState = States.PositionState.Barge;
 
   public boolean movingUP = false;

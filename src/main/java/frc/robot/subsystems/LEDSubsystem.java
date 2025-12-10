@@ -16,10 +16,10 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
-
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import static frc.robot.subsystems.Elevator.ledModifier;
+
 public class LEDSubsystem extends SubsystemBase {
   private static final int kPort = 0;
   private static final int kLength = 142;
@@ -33,11 +33,11 @@ public class LEDSubsystem extends SubsystemBase {
   Distance ledSpacing = Meters.of(1 / 120.0);
   Map<Double, Color> maskSteps = Map.of(0.0, Color.kWhite, percentEffective*ledModifier, Color.kBlack, 1-percentEffective*ledModifier, Color.kWhite);
   //Map<Double, Color> maskSteps = Map.of(0.0, Color.kWhite, 0.0, Color.kBlack, 1-0.0, Color.kWhite);
-  LEDPattern mask =
-   LEDPattern.steps(maskSteps);
+  LEDPattern mask = LEDPattern.steps(maskSteps);
 
-  LEDPattern steps = LEDPattern.steps(Map.of(0, Color.kAliceBlue, 0.25*percentEffective, Color.kYellowGreen, .5*percentEffective, Color.kCrimson, .75*percentEffective, Color.kDarkOrange, percentEffective, Color.kBlack, 1-percentEffective, Color.kRed, 100-.75*percentEffective, Color.kYellow, 100-.5*percentEffective, Color.kMagenta, 100-.25*percentEffective, Color.kPaleGreen));
-  LEDPattern pattern = steps.mask(mask);
+  LEDPattern steps = LEDPattern.steps(Map.of(0, Color.kAliceBlue, 0.25*percentEffective, Color.kAliceBlue, .5*percentEffective, Color.kAliceBlue, .75*percentEffective, Color.kAliceBlue, percentEffective, Color.kAliceBlue, 1-percentEffective, Color.kAliceBlue, 100-.75*percentEffective, Color.kAliceBlue, 100-.5*percentEffective, Color.kAliceBlue, 100-.25*percentEffective, Color.kAliceBlue));
+  //LEDPattern steps = LEDPattern.steps(Map.of(0, Color.kAliceBlue));
+  LEDPattern pattern = steps;
   
   public LEDSubsystem() {
     m_led = new AddressableLED(kPort);
@@ -58,14 +58,15 @@ public class LEDSubsystem extends SubsystemBase {
   public void periodic() {
     
     // Periodically send the latest LED color data to the LED strip for it to display
-    Map<Double, Color> maskSteps = Map.of(0.0, Color.kWhite, percentEffective*ledModifier, Color.kBlack, 1-percentEffective*ledModifier, Color.kWhite);
+    Map<Double, Color> maskSteps = Map.of(0.0, Color.kRed, 0.36, Color.kBlack, .575, Color.kRed);
+    SmartDashboard.putNumber("ledModifier", ledModifier);
     //Map<Double, Color> maskSteps = Map.of(0.0, Color.kWhite, 0.0, Color.kBlack, 1-0.0, Color.kWhite);
-    LEDPattern mask =
-    LEDPattern.steps(maskSteps);
+    LEDPattern mask = LEDPattern.steps(maskSteps);
 
-    LEDPattern steps = LEDPattern.steps(Map.of(0, Color.kAliceBlue, 0.25*percentEffective, Color.kYellowGreen, .5*percentEffective, Color.kCrimson, .75*percentEffective, Color.kDarkOrange, percentEffective, Color.kBlack, 1-percentEffective, Color.kRed, 100-.75*percentEffective, Color.kYellow, 100-.5*percentEffective, Color.kMagenta, 100-.25*percentEffective, Color.kPaleGreen));
-    LEDPattern pattern = steps.mask(mask);
-    pattern.applyTo(m_buffer);
+   //LEDPattern steps = LEDPattern.steps(Map.of(0, Color.kAliceBlue, 0.25*percentEffective, Color.kYellowGreen, .5*percentEffective, Color.kCrimson, .75*percentEffective, Color.kDarkOrange, percentEffective, Color.kYellow, 1-percentEffective, Color.kRed, 100-.75*percentEffective, Color.kYellow, 100-.5*percentEffective, Color.kMagenta, 100-.25*percentEffective, Color.kPaleGreen));
+   //LEDPattern steps = LEDPattern.steps(Map.of(0, Color.kCrimson));
+    //LEDPattern pattern = steps.mask(mask);
+    mask.applyTo(m_buffer);
     m_led.setData(m_buffer);
   }
 
